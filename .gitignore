@@ -1,0 +1,9 @@
+*.tsv
+
+*.log
+
+*.class
+
+*.jar
+*.zip
+*.tar.gz
