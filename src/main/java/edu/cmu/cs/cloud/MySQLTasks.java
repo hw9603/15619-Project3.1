@@ -153,7 +153,10 @@ public class MySQLTasks {
      */
     private static void q4() {
         dropCustomIndexesOnReviews();
-        String sql = "";
+        String sql = "SELECT user_id "
+                    + "FROM reviews "
+                    + "WHERE cool = (SELECT MAX(cool) FROM reviews);";
+
         executeDataManipulationQuery(sql);
         printScannedRows(sql);
     }
@@ -171,7 +174,7 @@ public class MySQLTasks {
      * The index should be a single-column index instead of a composite index.
      */
     private static void q5() {
-        String sql = "";
+        String sql = "CREATE INDEX review_index ON reviews (cool)";
         executeDataDefinitionQuery(sql);
         printIndexColumnNames("reviews");
     }
@@ -223,7 +226,9 @@ public class MySQLTasks {
      * </pre>
      */
     private static void q6() {
-        String sql = "";
+        String sql = "SELECT user_id "
+                    + "FROM reviews "
+                    + "WHERE cool = (SELECT MAX(cool) FROM reviews);";
         executeDataManipulationQuery(sql);
         printScannedRows(sql);
     }
@@ -248,7 +253,12 @@ public class MySQLTasks {
      * You are only allowed to edit the sql.
      */
     private static void q7() {
-        String sql = "";
+        String sql = "SELECT name "
+                    + "FROM businesses "
+                    + "WHERE neighborhood = 'South Side' "
+                    + "AND name LIKE BINARY '%Coast%' "
+                    + "AND business_id NOT IN ( "
+                    + "SELECT business_id FROM checkins);";
         executeDataManipulationQuery(sql);
     }
 
@@ -267,7 +277,10 @@ public class MySQLTasks {
      * You are only allowed to edit the sql.
      */
     private static void q8() {
-        String sql = "";
+        String sql = "SELECT name "
+                    + "FROM users "
+                    + "WHERE useful = (SELECT MAX(useful) FROM users) "
+                    + "AND user_id IN (SELECT user_id FROM tips);";
         executeDataManipulationQuery(sql);
     }
 
@@ -280,7 +293,13 @@ public class MySQLTasks {
      * You are only allowed to edit the sql.
      */
     private static void q9() {
-        String sql = "";
+        String sql = "SELECT city FROM ( "
+                    + "SELECT city, AVG(stars) AS avg_star "
+                    + "FROM businesses "
+                    + "GROUP BY city "
+                    + "ORDER BY avg_star DESC, city "
+                    + "LIMIT 3"
+                    + ")c;";
         executeDataManipulationQuery(sql);
     }
 

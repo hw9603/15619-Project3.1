@@ -86,7 +86,7 @@ q1() {
   # Column-wise data processing with awk or pandas
   #
   # Question:
-  # How many rows in `yelp_academic_dataset_business.tsv` that contain 
+  # How many rows in `yelp_academic_dataset_business.tsv` that contain
   # "Las Vegas" as a substring in the "city" field (case insensitive)?
   #
   # In this question, we recommend 2 different approaches, one with awk and
@@ -133,7 +133,7 @@ q1() {
   #
   # Standard output format:
   # <number>
-  :
+  python q1.py
 }
 
 q2() {
@@ -148,8 +148,8 @@ q2() {
   # also allowed to choose other approaches.
   #
   # * pandas:
-  # Pandas can perform SQL’s GROUP BY operations. GROUP BY in pandas is to divide 
-  # the DataFrame objects into groups by one or more columns, usually for the 
+  # Pandas can perform SQL’s GROUP BY operations. GROUP BY in pandas is to divide
+  # the DataFrame objects into groups by one or more columns, usually for the
   # purpose of applying some function (typically aggregation) to each group.
   #
   # You can solve the question by filling in the template, `__` is the
@@ -161,7 +161,7 @@ q2() {
   #
   # Standard output format:
   # <number>
-  :
+  python q2.py
 }
 
 q3() {
@@ -177,20 +177,20 @@ q3() {
   # * pandas:
   # Pandas can merge DataFrame objects by performing a database-style join
   # operation by columns or indexes.
-  # There're different types of join options in Pandas: ‘left’, ‘right’, 
+  # There're different types of join options in Pandas: ‘left’, ‘right’,
   # ‘outer’, ‘inner’, like in other databases, and the default join is ‘left’.
   # e.g. Join A and B on column key in Pandas will be
   # import pandas as pd
   # pd.merge(A, B, on=key)
   #
   # Hint:
-  # Be aware that you're using a micro instance which means resources such as 
+  # Be aware that you're using a micro instance which means resources such as
   # memory is rather limited. Try your best to optimize your QUERY so that you
   # are not running into issues such as Out-Of-Memory (OOM).
   #
   # Standard output format:
   # <number>
-  :
+  python q3.py
 }
 
 ################################################################################
