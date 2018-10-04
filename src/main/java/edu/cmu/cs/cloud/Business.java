@@ -87,4 +87,24 @@ public class Business {
      */
     @Column
     private String state;
+    /**
+     * `neighborhood` varchar(140) default null.
+     */
+    @Column
+    private String neighborhood;
+    /**
+     * `is_open` tinyint(1) not null.
+     */
+    @Column
+    private boolean is_open;
+    /**
+     * `attributes` LONGTEXT default null.
+     */
+    @Column
+    private String attributes;
+    /**
+     * `categories` LONGTEXT default null.
+     */
+    @Column
+    private String categories;
 }
