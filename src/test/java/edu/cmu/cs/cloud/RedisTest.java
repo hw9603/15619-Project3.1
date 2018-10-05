@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.List;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -58,31 +60,54 @@ class RedisTest {
 
     @Test
     void hset() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+
+        assertEquals(1, redisClient.hset("myhash", "field1", "apple"));
+        assertEquals(0, redisClient.hset("myhash", "field1", "banana"));
+        assertEquals(1, redisClient.hset("myhash1", "field1", "apple"));
+        assertEquals(1, redisClient.hset("myhash1", "field2", "apple"));
     }
 
     @Test
     void hget() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+        redisClient.hset("myhash", "field1", "apple");
+
+        assertEquals("apple", redisClient.hget("myhash", "field1"));
+        assertNull(redisClient.hget("myhash", "field2"));
     }
 
     @Test
     void hgetall() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+        redisClient.hset("myhash", "field1", "apple");
+        redisClient.hset("myhash", "field2", "banana");
+
+        List<String> ret = redisClient.hgetall("myhash");
+
+        assertEquals(Arrays.asList("field1", "apple", "field2", "banana"), ret);
     }
 
     @Test
     void llen() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+        assertEquals(0, redisClient.llen("mylist"));
     }
 
     @Test
     void rpush() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+        assertEquals(1, redisClient.rpush("mylist", new String[]{"apple"}));
+        assertEquals(3, redisClient.rpush("mylist", new String[]{"b", "c"}));
     }
 
     @Test
     void rpop() {
-        throw new RuntimeException("add test cases on your own");
+        Redis redisClient = new Redis();
+        redisClient.rpush("mylist", new String[]{"a", "b", "c"});
+        assertEquals("c", redisClient.rpop("mylist"));
+        assertEquals("b", redisClient.rpop("mylist"));
+        assertEquals("a", redisClient.rpop("mylist"));
+        assertNull(redisClient.rpop("mylist"));
     }
 }
