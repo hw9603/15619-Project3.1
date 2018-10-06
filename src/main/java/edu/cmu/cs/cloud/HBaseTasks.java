@@ -13,6 +13,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.Filter;
+import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -24,7 +26,7 @@ public class HBaseTasks {
     /**
      * The private IP address of HBase master node.
      */
-    private static String zkAddr = "<Private IP of Master Node Here>";
+    private static String zkAddr = "172.31.90.129";
     /**
      * The name of your HBase table.
      */
@@ -157,8 +159,40 @@ public class HBaseTasks {
      * You are allowed to make changes such as modifying method name, parameter
      * list and/or return type.
      */
-    private static void q11() {
+    private static void q11() throws IOException {
+        Scan scan = new Scan();
+        byte[] neighborhoodCol = Bytes.toBytes("neighborhood");
+        byte[] categoriesCol = Bytes.toBytes("categories");
+        byte[] attributesCol = Bytes.toBytes("attributes");
+        byte[] nameCol = Bytes.toBytes("name");
+        scan.addColumn(bColFamily, neighborhoodCol);
+        scan.addColumn(bColFamily, categoriesCol);
+        scan.addColumn(bColFamily, attributesCol);
+        scan.addColumn(bColFamily, nameCol);
+        SubstringComparator neighborhoodComp = new SubstringComparator("Shadyside");
+        SubstringComparator categoriesComp = new SubstringComparator("Asian Fusion");
+        SubstringComparator wifiComp = new SubstringComparator("'WiFi': 'free'");
+        SubstringComparator bikeParkingComp = new SubstringComparator("'BikeParking': True");
+        Filter neighborhoodFilter = new SingleColumnValueFilter(
+                bColFamily, neighborhoodCol, CompareFilter.CompareOp.EQUAL, neighborhoodComp);
+        Filter categoriesFilter = new SingleColumnValueFilter(
+                bColFamily, categoriesCol, CompareFilter.CompareOp.EQUAL, categoriesComp);
+        Filter wifiFilter = new SingleColumnValueFilter(
+                bColFamily, attributesCol, CompareFilter.CompareOp.EQUAL, wifiComp);
+        Filter bikeParkingFilter = new SingleColumnValueFilter(
+                bColFamily, attributesCol, CompareFilter.CompareOp.EQUAL, bikeParkingComp);
+        FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
+        filterList.addFilter(neighborhoodFilter);
+        filterList.addFilter(categoriesFilter);
+        filterList.addFilter(wifiFilter);
+        filterList.addFilter(bikeParkingFilter);
+        scan.setFilter(filterList);
 
+        ResultScanner rs = bizTable.getScanner(scan);
+        for (Result r = rs.next(); r != null; r = rs.next()) {
+            System.out.println(Bytes.toString(r.getValue(bColFamily, nameCol)));
+        }
+        rs.close();
     }
 
     /**
@@ -187,7 +221,48 @@ public class HBaseTasks {
      * You are allowed to make changes such as modifying method name, parameter
      * list and/or return type.
      */
-    private static void q12() {
+    private static void q12() throws IOException {
+        Scan scan = new Scan();
+        byte[] nameCol = Bytes.toBytes("name");
+        byte[] neighborhoodCol = Bytes.toBytes("neighborhood");
+        byte[] cityCol = Bytes.toBytes("city");
+        byte[] hoursCol = Bytes.toBytes("hours");
+        byte[] attributesCol = Bytes.toBytes("attributes");
+        scan.addColumn(bColFamily, nameCol);
+        scan.addColumn(bColFamily, neighborhoodCol);
+        scan.addColumn(bColFamily, cityCol);
+        scan.addColumn(bColFamily, hoursCol);
+        scan.addColumn(bColFamily, attributesCol);
+
+        SubstringComparator nameComp = new SubstringComparator("India");
+        RegexStringComparator neighborhoodComp = new RegexStringComparator(
+                ".*(Downtown|Oakland).*");
+        SubstringComparator cityComp = new SubstringComparator("Pittsburgh");
+        SubstringComparator hoursComp = new SubstringComparator("'Friday': '17:00");
+        SubstringComparator deliveryComp = new SubstringComparator("'RestaurantsDelivery': True");
+
+        Filter nameFilter = new SingleColumnValueFilter(
+                bColFamily, nameCol, CompareFilter.CompareOp.EQUAL, nameComp);
+        Filter neighborhoodFilter = new SingleColumnValueFilter(
+                bColFamily, neighborhoodCol, CompareFilter.CompareOp.EQUAL, neighborhoodComp);
+        Filter cityFilter = new SingleColumnValueFilter(
+                bColFamily, cityCol, CompareFilter.CompareOp.EQUAL, cityComp);
+        Filter hoursFilter = new SingleColumnValueFilter(
+                bColFamily, hoursCol, CompareFilter.CompareOp.EQUAL, hoursComp);
+        Filter deliveryFilter = new SingleColumnValueFilter(
+                bColFamily, attributesCol, CompareFilter.CompareOp.EQUAL, deliveryComp);
+        FilterList filterList = new FilterList(FilterList.Operator.MUST_PASS_ALL);
+        filterList.addFilter(nameFilter);
+        filterList.addFilter(neighborhoodFilter);
+        filterList.addFilter(cityFilter);
+        filterList.addFilter(hoursFilter);
+        filterList.addFilter(deliveryFilter);
+        scan.setFilter(filterList);
+
+        ResultScanner rs = bizTable.getScanner(scan);
+        for (Result r = rs.next(); r != null; r = rs.next()) {
+            System.out.println(Bytes.toString(r.getValue(bColFamily, nameCol)));
+        }
 
     }
 
@@ -205,6 +280,7 @@ public class HBaseTasks {
      * list and/or return type.
      */
     private static void q13() {
+
 
     }
 
