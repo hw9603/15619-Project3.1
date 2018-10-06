@@ -2,10 +2,22 @@
   "referenceGuide":"Cite all the reference sources in the required format. Proper citations will help you avoid unnecessary trouble but does not make it acceptable to copy code. Read the course and university policy statements in this regard. When working with others, limit the discussion to block diagrams and arrows. Do not look at another students' code. Read the JSON semantics and make use of JSON validator from the Internet if needed.",
   "websites":[
     {
-      "title":"<title of the page>",
-      "url":"<url>",
+      "title":"how to get the row key from hbase scan result",
+      "url":"https://stackoverflow.com/questions/11787145/how-to-get-the-row-key-from-hbase-scan-result",
       "code":"<explain in which part of your code did you use the snippet or idea>",
-      "description":"<additional information you may find necessary to provide>"
+      "description":"I learned how to scan rows using row key."
+    },
+    {
+      "title":"Class AggregationClient",
+      "url":"https://hbase.apache.org/devapidocs/org/apache/hadoop/hbase/client/coprocessor/AggregationClient.html",
+      "code":"<explain in which part of your code did you use the snippet or idea>",
+      "description":"I learned how to use AggregationClient."
+    },
+    {
+      "title":"68. Client Request Filters",
+      "url":"http://hbase.apache.org/book.html#client.filter",
+      "code":"<explain in which part of your code did you use the snippet or idea>",
+      "description":"I learned how to use different filter methods in HBase."
     }
   ]
 }
