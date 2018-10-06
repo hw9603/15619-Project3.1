@@ -1,6 +1,7 @@
 package edu.cmu.cs.cloud;
 
 import java.io.IOException;
+import java.lang.Throwable;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -11,6 +12,8 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.coprocessor.AggregationClient;
+import org.apache.hadoop.hbase.client.coprocessor.LongColumnInterpreter;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
@@ -263,7 +266,7 @@ public class HBaseTasks {
         for (Result r = rs.next(); r != null; r = rs.next()) {
             System.out.println(Bytes.toString(r.getValue(bColFamily, nameCol)));
         }
-
+        rs.close();
     }
 
     /**
@@ -279,9 +282,18 @@ public class HBaseTasks {
      * You are allowed to make changes such as modifying method name, parameter
      * list and/or return type.
      */
-    private static void q13() {
-
-
+    private static void q13() throws IOException {
+        Scan scan = new Scan();
+        byte[] nameCol = Bytes.toBytes("name");
+        scan.addColumn(bColFamily, nameCol);
+        ResultScanner rs = bizTable.getScanner(scan);
+        for (Result r = rs.next(); r != null; r = rs.next()) {
+            if (Bytes.toString(r.getRow()).equals("I1vE5o98Wy5pCULJoEclqw")) {
+                System.out.println(Bytes.toString(r.getValue(bColFamily, nameCol)));
+                break;
+            }
+        }
+        rs.close();
     }
 
     /**
@@ -314,7 +326,21 @@ public class HBaseTasks {
      * list and/or return type.
      */
     private static void q14() {
-
+        try {
+            Configuration conf = HBaseConfiguration.create();
+            // conf.setInt("hbase.client.retries.number", 1);
+            // conf.setInt("ipc.client.connect.max.retries", 1);
+            conf.set("hbase.zookeeper.quorum", zkAddr);
+            conf.set("hbase.zookeeper.property.clientport", "2181");
+            AggregationClient aggregationClient = new AggregationClient(conf);
+            Scan scan = new Scan();
+            scan.addFamily(bColFamily);
+            long rowCount = aggregationClient.rowCount(
+                    tableName, new LongColumnInterpreter(), scan);
+            System.out.println(rowCount);
+        } catch (Throwable e) {
+            System.err.println(e);
+        }
     }
 
 }
